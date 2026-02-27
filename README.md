@@ -21,9 +21,7 @@ Or with declarative sources in `rulesync.jsonc`:
 
 ```jsonc
 {
-  "sources": [
-    { "source": "rudironsoni/dotnet-harness", "path": ".rulesync" },
-  ],
+  "sources": [{ "source": "rudironsoni/dotnet-harness", "path": ".rulesync" }],
 }
 ```
 
@@ -35,8 +33,8 @@ rulesync install && rulesync generate --targets "*" --features "*"
 
 Download the zip for your AI coding agent from the [latest release](https://github.com/rudironsoni/dotnet-harness-plugin/releases/latest) and extract into your project root:
 
-| Platform       | Bundle                                 | Extract to                 |
-| -------------- | -------------------------------------- | -------------------------- |
+| Platform       | Bundle                           | Extract to                 |
+| -------------- | -------------------------------- | -------------------------- |
 | Claude Code    | `dotnet-harness-claudecode.zip`  | `.claude/`                 |
 | OpenCode       | `dotnet-harness-opencode.zip`    | `.opencode/` + `AGENTS.md` |
 | GitHub Copilot | `dotnet-harness-copilot.zip`     | `.github/`                 |
@@ -45,10 +43,23 @@ Download the zip for your AI coding agent from the [latest release](https://gith
 | Antigravity    | `dotnet-harness-antigravity.zip` | `.agent/`                  |
 | AGENTS.md      | `dotnet-harness-agentsmd.zip`    | `.agents/` + `AGENTS.md`   |
 
-### OpenCode npm plugin
+### Platform npm packages
 
 ```bash
 npm config set @rudironsoni:registry https://npm.pkg.github.com
+```
+
+- OpenCode: `@rudironsoni/dotnet-harness-opencode`
+- Claude Code: `@rudironsoni/dotnet-harness-claudecode`
+- GitHub Copilot: `@rudironsoni/dotnet-harness-copilot`
+- Codex CLI: `@rudironsoni/dotnet-harness-codexcli`
+- Gemini CLI: `@rudironsoni/dotnet-harness-geminicli`
+- AGENTS.md: `@rudironsoni/dotnet-harness-agentsmd`
+- Antigravity: `@rudironsoni/dotnet-harness-antigravity`
+
+OpenCode plugin install example:
+
+```bash
 npm install @rudironsoni/dotnet-harness-opencode
 ```
 
