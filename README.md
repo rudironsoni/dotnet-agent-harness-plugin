@@ -22,8 +22,8 @@ Or with declarative sources in `rulesync.jsonc`:
 ```jsonc
 {
   "sources": [
-    { "source": "rudironsoni/dotnet-agent-harness", "path": ".rulesync" }
-  ]
+    { "source": "rudironsoni/dotnet-agent-harness", "path": ".rulesync" },
+  ],
 }
 ```
 
@@ -35,43 +35,46 @@ rulesync install && rulesync generate --targets "*" --features "*"
 
 Download the zip for your AI coding agent from the [latest release](https://github.com/rudironsoni/dotnet-agent-harness-plugin/releases/latest) and extract into your project root:
 
-| Platform | Bundle | Extract to |
-|---|---|---|
-| Claude Code | `dotnet-agent-harness-claudecode.zip` | `.claude/` |
-| OpenCode | `dotnet-agent-harness-opencode.zip` | `.opencode/` + `AGENTS.md` |
-| GitHub Copilot | `dotnet-agent-harness-copilot.zip` | `.github/` |
-| Codex CLI | `dotnet-agent-harness-codexcli.zip` | `.codex/` + `AGENTS.md` |
-| Gemini CLI | `dotnet-agent-harness-geminicli.zip` | `.gemini/` + `GEMINI.md` |
-| Antigravity | `dotnet-agent-harness-antigravity.zip` | `.agent/` |
-| AGENTS.md | `dotnet-agent-harness-agentsmd.zip` | `.agents/` + `AGENTS.md` |
+| Platform       | Bundle                                 | Extract to                 |
+| -------------- | -------------------------------------- | -------------------------- |
+| Claude Code    | `dotnet-agent-harness-claudecode.zip`  | `.claude/`                 |
+| OpenCode       | `dotnet-agent-harness-opencode.zip`    | `.opencode/` + `AGENTS.md` |
+| GitHub Copilot | `dotnet-agent-harness-copilot.zip`     | `.github/`                 |
+| Codex CLI      | `dotnet-agent-harness-codexcli.zip`    | `.codex/` + `AGENTS.md`    |
+| Gemini CLI     | `dotnet-agent-harness-geminicli.zip`   | `.gemini/` + `GEMINI.md`   |
+| Antigravity    | `dotnet-agent-harness-antigravity.zip` | `.agent/`                  |
+| AGENTS.md      | `dotnet-agent-harness-agentsmd.zip`    | `.agents/` + `AGENTS.md`   |
 
 ### OpenCode npm plugin
 
 ```bash
-npm install @dotnet-agent-harness/opencode-plugin
+npm config set @rudironsoni:registry https://npm.pkg.github.com
+npm install @rudironsoni/opencode-plugin
 ```
+
+For private package authentication, configure a GitHub token with `read:packages` in your `.npmrc`.
 
 Then add to your `opencode.json`:
 
 ```json
 {
   "plugins": {
-    "dotnet-agent-harness": "@dotnet-agent-harness/opencode-plugin"
+    "dotnet-agent-harness": "@rudironsoni/opencode-plugin"
   }
 }
 ```
 
 ## Supported platforms
 
-| Platform | Rules | Commands | Subagents | Skills | MCP | Hooks |
-|---|---|---|---|---|---|---|
-| Claude Code | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| OpenCode | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| GitHub Copilot | ✅ | ✅ | ✅ | ✅ | ✅ | |
-| Codex CLI | ✅ | ✅ | ✅ | ✅ | ✅ | |
-| Gemini CLI | ✅ | ✅ | | ✅ | ✅ | |
-| Antigravity | ✅ | ✅ | | ✅ | | |
-| AGENTS.md | ✅ | | | ✅ | | |
+| Platform       | Rules | Commands | Subagents | Skills | MCP | Hooks |
+| -------------- | ----- | -------- | --------- | ------ | --- | ----- |
+| Claude Code    | ✅    | ✅       | ✅        | ✅     | ✅  | ✅    |
+| OpenCode       | ✅    | ✅       | ✅        | ✅     | ✅  | ✅    |
+| GitHub Copilot | ✅    | ✅       | ✅        | ✅     | ✅  |       |
+| Codex CLI      | ✅    | ✅       | ✅        | ✅     | ✅  |       |
+| Gemini CLI     | ✅    | ✅       |           | ✅     | ✅  |       |
+| Antigravity    | ✅    | ✅       |           | ✅     |     |       |
+| AGENTS.md      | ✅    |          |           | ✅     |     |       |
 
 ## Source
 

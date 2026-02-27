@@ -1,0 +1,146 @@
+name: Enforce Generated Policy
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  enforce-generated-only:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate changed paths
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          BEFORE_SHA: ${{ github.event.before }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+
+          if [[ "$EVENT_NAME" == "pull_request" ]]; then
+            FROM_SHA="$BASE_SHA"
+          else
+            FROM_SHA="$BEFORE_SHA"
+          fi
+
+          if [[ -z "$FROM_SHA" || "$FROM_SHA" == "0000000000000000000000000000000000000000" ]]; then
+            FROM_SHA="$(git rev-list --max-parents=0 HEAD | tail -n 1)"
+          fi
+
+          mapfile -t changed_files < <(git diff --name-only "$FROM_SHA" "$HEAD_SHA")
+
+          if [[ "${#changed_files[@]}" -eq 0 ]]; then
+            echo "No changed files detected."
+            exit 0
+          fi
+
+          disallowed_files=()
+
+          is_generated_path() {
+            case "$1" in
+              .claude/*|.opencode/*|.codex/*|.gemini/*|.agents/*|.agent/*|.github/agents/*|.github/skills/*|.github/instructions/*|.github/prompts/*|packages/opencode-plugin/*|AGENTS.md|GEMINI.md|.github/copilot-instructions.md)
+                return 0
+                ;;
+              *)
+                return 1
+                ;;
+            esac
+          }
+
+          is_allowed_non_generated_path() {
+            case "$1" in
+              README.md|LICENSE|.gitignore|.github/workflows/*|.github/actions/*|.gitmodules)
+                return 0
+                ;;
+              *)
+                return 1
+                ;;
+            esac
+          }
+
+          for file in "${changed_files[@]}"; do
+            if ! is_generated_path "$file" && ! is_allowed_non_generated_path "$file"; then
+              disallowed_files+=("$file")
+            fi
+          done
+
+          if [[ "${#disallowed_files[@]}" -gt 0 ]]; then
+            echo "Disallowed files changed in distribution repo:"
+            printf ' - %s\n' "${disallowed_files[@]}"
+            exit 1
+          fi
+
+          echo "Generated-only path policy passed."
+
+  enforce-bot-author-for-generated:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate bot actor for generated changes
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          BEFORE_SHA: ${{ github.event.before }}
+          HEAD_SHA: ${{ github.sha }}
+          ACTOR: ${{ github.actor }}
+        run: |
+          set -euo pipefail
+
+          if [[ "$EVENT_NAME" == "pull_request" ]]; then
+            FROM_SHA="$BASE_SHA"
+          else
+            FROM_SHA="$BEFORE_SHA"
+          fi
+
+          if [[ -z "$FROM_SHA" || "$FROM_SHA" == "0000000000000000000000000000000000000000" ]]; then
+            FROM_SHA="$(git rev-list --max-parents=0 HEAD | tail -n 1)"
+          fi
+
+          mapfile -t changed_files < <(git diff --name-only "$FROM_SHA" "$HEAD_SHA")
+
+          if [[ "${#changed_files[@]}" -eq 0 ]]; then
+            echo "No changed files detected."
+            exit 0
+          fi
+
+          is_generated_path() {
+            case "$1" in
+              .claude/*|.opencode/*|.codex/*|.gemini/*|.agents/*|.agent/*|.github/agents/*|.github/skills/*|.github/instructions/*|.github/prompts/*|packages/opencode-plugin/*|AGENTS.md|GEMINI.md|.github/copilot-instructions.md)
+                return 0
+                ;;
+              *)
+                return 1
+                ;;
+            esac
+          }
+
+          generated_changed=false
+          for file in "${changed_files[@]}"; do
+            if is_generated_path "$file"; then
+              generated_changed=true
+              break
+            fi
+          done
+
+          if [[ "$generated_changed" == true && "$ACTOR" != "github-actions[bot]" ]]; then
+            echo "Generated paths can only be changed by github-actions[bot]. Current actor: $ACTOR"
+            exit 1
+          fi
+
+          echo "Bot ownership policy passed."
