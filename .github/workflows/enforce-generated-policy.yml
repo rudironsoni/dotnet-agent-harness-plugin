@@ -140,10 +140,11 @@ jobs:
           if [[ "$generated_changed" == true ]]; then
             mapfile -t commits < <(git rev-list "$FROM_SHA..$HEAD_SHA")
             for c in "${commits[@]}"; do
-              author="$(git show -s --format='%an <%ae>' "$c")"
-              if [[ "$author" != "github-actions[bot] <github-actions[bot]@users.noreply.github.com>" ]]; then
+              author_name="$(git show -s --format='%an' "$c")"
+              author_email="$(git show -s --format='%ae' "$c")"
+              if [[ "$author_name" != "github-actions[bot]" ]] || [[ "$author_email" != *"github-actions[bot]"*"@users.noreply.github.com" ]]; then
                 echo "Generated paths require bot-authored commits only."
-                echo "Found non-bot commit: $c by $author"
+                echo "Found non-bot commit: $c by ${author_name} <${author_email}>"
                 exit 1
               fi
             done
