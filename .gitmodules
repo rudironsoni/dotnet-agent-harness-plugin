@@ -1,3 +1,4 @@
 [submodule "dotnet-harness"]
 	path = dotnet-harness
 	url = https://github.com/rudironsoni/dotnet-harness.git
+	branch = main
