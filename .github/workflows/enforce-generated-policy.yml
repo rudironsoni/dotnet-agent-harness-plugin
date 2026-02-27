@@ -50,7 +50,7 @@ jobs:
 
           is_generated_path() {
             case "$1" in
-              .claude/*|.opencode/*|.codex/*|.gemini/*|.agents/*|.agent/*|.github/agents/*|.github/skills/*|.github/instructions/*|.github/prompts/*|packages/opencode-plugin/*|AGENTS.md|GEMINI.md|.github/copilot-instructions.md)
+              .claude/*|.opencode/*|.codex/*|.gemini/*|.agents/*|.agent/*|.github/agents/*|.github/skills/*|.github/instructions/*|.github/prompts/*|packages/dotnet-harness-opencode/*|AGENTS.md|GEMINI.md|.github/copilot-instructions.md)
                 return 0
                 ;;
               *)
@@ -121,7 +121,7 @@ jobs:
 
           is_generated_path() {
             case "$1" in
-              .claude/*|.opencode/*|.codex/*|.gemini/*|.agents/*|.agent/*|.github/agents/*|.github/skills/*|.github/instructions/*|.github/prompts/*|packages/opencode-plugin/*|AGENTS.md|GEMINI.md|.github/copilot-instructions.md)
+              .claude/*|.opencode/*|.codex/*|.gemini/*|.agents/*|.agent/*|.github/agents/*|.github/skills/*|.github/instructions/*|.github/prompts/*|packages/dotnet-harness-opencode/*|AGENTS.md|GEMINI.md|.github/copilot-instructions.md)
                 return 0
                 ;;
               *)

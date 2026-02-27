@@ -1,3 +1,3 @@
-[submodule "dotnet-agent-harness"]
-	path = dotnet-agent-harness
-	url = https://github.com/rudironsoni/dotnet-agent-harness.git
+[submodule "dotnet-harness"]
+	path = dotnet-harness
+	url = https://github.com/rudironsoni/dotnet-harness.git
