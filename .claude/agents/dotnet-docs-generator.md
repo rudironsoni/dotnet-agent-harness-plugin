@@ -12,8 +12,6 @@ allowed-tools:
   - Grep
   - Glob
   - Bash
-  - Edit
-  - Write
 ---
 # dotnet-docs-generator
 
